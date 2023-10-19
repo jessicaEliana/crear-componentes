@@ -1,4 +1,5 @@
 import { Task } from "./task"
+import React, { useState } from 'react';
 
 export function Todo(){
     const tasks = [
@@ -15,11 +16,41 @@ export function Todo(){
          imgUrl: 'https://images.unsplash.com/photo-1597423498043-8f85e9eb8ade?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1374'
         }
     ]
+
+    const [tasksState, setTasksState] = useState(tasks)
+    const [titleState, setTitleStalte] = useState('')
+    const [descriptionState, setDescriptionState] = useState('')
+
+
+    function handleSubmit(e){
+        e.preventDefault()
+        
+        const tasksStateClone = [...tasksState]
+        tasksStateClone.push({
+            title: titleState,
+            description: descriptionState
+        })
+
+        setTasksState(tasksStateClone)
+    }
+
     return(
-        <div className="task-list">
-            {tasks.map((task)=> {
-                return <Task task={task}></Task>
-            })}
-        </div>
-    )
+        <>
+            <form onSubmit={handleSubmit}>
+                
+                <label htmlFor="title">Ingresar nombre: </label>
+                <input onChange={(e)=>setTitleStalte(e.target.value)} name="title"></input>
+                <br></br>
+                <label htmlFor="description">Ingresa tu consulta: </label>
+                <textarea onChange={(e)=>setDescriptionState(e.target.value)} name="description"></textarea>
+
+                <button type="submit">Enviar</button>
+                
+            </form>
+            <div className="task-list">
+                {tasksState.map((task)=> {
+                    return <Task task={task}></Task>
+                })}
+            </div>
+        </>)
 }
